@@ -1,0 +1,62 @@
+{
+    "name": "sintret/yii2-basic",
+    "description": "Yii 2 Basic Application Template",
+    "keywords": ["yii2", "framework", "basic", "application template","adminlte","chat","todolist","whatsapp"],
+    "homepage": "http://sintret.com/",
+    "type": "project",
+    "license": "BSD-3-Clause",
+    "support": {
+        "issues": "https://github.com/sintret/yii2-basic/issues",
+        "forum": "http://sintret.com/blog_detail/523/yii2_create_project_with_adminlte_basic_and_advanced_easyly",
+        "source": "https://github.com/sintret/yii2-basic"
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "*",
+        "yiisoft/yii2-bootstrap": "*",
+        "yiisoft/yii2-swiftmailer": "*",
+        "kartik-v/yii2-detail-view": "*",
+        "kartik-v/yii2-password": "dev-master",
+        "sendgrid/sendgrid": "2.1.1",
+        "sintret/yii2-gii-adminlte": "dev-master",
+        "sintret/yii2-chat-adminlte": "dev-master",
+        "sintret/yii2-todolist": "dev-master",
+        "miloschuman/yii2-highcharts-widget": "*",
+        "sintret/whatsapp": "dev-master",
+        "mihaildev/yii2-ckeditor": "*"
+
+    },
+    "require-dev": {
+        "yiisoft/yii2-codeception": "*",
+        "yiisoft/yii2-debug": "*",
+        "yiisoft/yii2-gii": "*",
+        "yiisoft/yii2-faker": "*"
+    },
+    "config": {
+        "process-timeout": 1800
+    },
+    "scripts": {
+        "post-create-project-cmd": [
+            "yii\\composer\\Installer::postCreateProject"
+        ]
+    },
+    "extra": {
+        "yii\\composer\\Installer::postCreateProject": {
+            "setPermission": [
+                {
+                    "runtime": "0777",
+                    "web/assets": "0777",
+                    "yii": "0755"
+                }
+            ],
+            "generateCookieValidationKey": [
+                "config/web.php"
+            ]
+        },
+        "asset-installer-paths": {
+            "npm-asset-library": "vendor/npm",
+            "bower-asset-library": "vendor/bower"
+        }
+    }
+}

@@ -1,0 +1,33 @@
+{
+    "name": "sintret/whatsapp",
+    "description": "Yii2 extension for Whatsapp plugin",
+    "keywords": [
+        "yii2",
+        "whatsapp",
+        "jQuery",
+        "plugin",
+        "ajax"
+    ],
+    "homepage": "https://github.com/sintret/WhatsAPI",
+    "type": "yii2-extension",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/sintret/WhatsAPI/issues",
+        "source": "https://github.com/sintret/WhatsAPI"
+    },
+    "authors": [
+        {
+            "name": "Andy Fitria",
+            "homepage": "http://sintret.com"
+        }
+    ],
+    "require": {
+        "php":">=5.4.0"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "sintret\\whatsapp\\": ""
+        }
+    }
+}
