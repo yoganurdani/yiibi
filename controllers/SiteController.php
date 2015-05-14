@@ -12,7 +12,11 @@ use app\models\ResetPasswordForm;
 use app\models\PasswordResetRequestForm;
 use app\models\SignupForm;
 use app\models\User;
+use app\models\Complain;
+use app\models\ImportCsv;
+use app\models\UploadForm;
 use yii\helpers\Url;
+use yii\web\UploadedFile;
 
 //use app\widgets\Alert;
 
@@ -57,7 +61,8 @@ class SiteController extends Controller {
         if (Yii::$app->user->isGuest) {
             $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('site/login'));
         }
-        return $this->render('index');
+        $data = Complain::find()->all();
+        return $this->render('index', ['data'=> $data]);
     }
 
     public function actionLogin() {
@@ -281,5 +286,61 @@ class SiteController extends Controller {
             }
         }
     }
+    
+    public function actionImportcsv() {
+	$model = new ImportCsv;
+	if (isset($_POST['ImportCsv'])) {
+		$model->attributes = $_POST['ImportCsv'];
+		$file = CUploadedFile::getInstance($model, 'file');
+		if (($fp = fopen($file->tempName, "r")) !== false) {
+			while (($line = fgetcsv($fp, 1000, ",")) !== false) {
+				$new_user = new User;
+				$new_user->nama = $line[0];
+				$new_user->username = $line[1];
+				$new_user->password = md5($line[2]);
+				$new_user->save();
+			}
+			fclose($fp);
+			$this->redirect(array('admin'));
+		}
+	}
+	$this->render('importcsv', array('model'=>$model));
+}
+    
+    public function actionUpload()
+    {
+        $model = new UploadForm();
+        $listIsi = array();
+        array_push($listIsi, "masuk -2");
+        if (Yii::$app->request->isPost) {
+            $model->file = UploadedFile::getInstance($model, 'file');
+            array_push($listIsi, "masuk -1");
+           if ($model->file && $model->validate()) {                
+                $model->file->saveAs('uploads/' . $model->file->baseName . '.' . $model->file->extension);
+            }
+            array_push($listIsi, $model->file->tempName);
+            $tpm = tempnam("C:\xampp\htdocs\yiibi\web\uploads\complain.csv", "complain");
+            array_push($listIsi, $tpm);
+            if (($fp = fopen("C:\xampp\htdocs\yiibi\web\uploads\complain.csv", "r")) !== false) {
+                array_push($listIsi, "masuk 1");
+			     while (($line = fgetcsv($fp, 1000, ",")) !== false) {
+                    array_push($listIsi, "masuk 2");
+                    array_push($listIsi, $line[0], $line[1], $line[2], $line[3]);
+                    $new = new Complain;
+                    $new->jumlahKomplain = $line[0];
+                    $new->tanggal = $line[1];
+                    $new->responKomplain = $line[2];
+                    $new->jumlahCS = $line[3];
+                    $new->save();
+			     }
+			     fclose($fp);
+			     $this->redirect(array('upload'));
+        	}
+        }
+
+        return $this->render('upload', ['model' => $model, 'listisi' => $listIsi]);
+    }
 
 }
+
+
