@@ -8,7 +8,7 @@ use app\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use miloschuman\highcharts\Highcharts;
+
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -135,18 +135,3 @@ class UserController extends Controller {
 
 }
 
-echo Highcharts::widget([
-   'options' => [
-      'title' => ['text' => 'Fruit Consumption'],
-      'xAxis' => [
-         'categories' => ['Apples', 'Bananas', 'Oranges']
-      ],
-      'yAxis' => [
-         'title' => ['text' => 'Fruit eaten']
-      ],
-      'series' => [
-         ['name' => 'Jane', 'data' => [1, 0, 4]],
-         ['name' => 'John', 'data' => [5, 7, 3]]
-      ]
-   ]
-]);

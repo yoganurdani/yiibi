@@ -6,6 +6,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use yii\helpers\Url;
+use miloschuman\highcharts\Highcharts;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -166,7 +167,7 @@ AppAsset::register($this);
 
                 <!-- Main content -->
                 <section class="content">
-                    <div class="col-lg-12">
+                    <div class="col-xm-6">
                         <?php
                         foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
                             echo '<div class="alert alert-' . $key . ' alert-dismissible"> <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>' . $message . '</div>';
