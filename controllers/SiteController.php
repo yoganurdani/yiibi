@@ -307,8 +307,9 @@ class SiteController extends Controller {
 	$this->render('importcsv', array('model'=>$model));
 }
     
-    public function actionUpload()
+      public function actionUpload()
     {
+	
         $model = new UploadForm();
         $listIsi = array();
         array_push($listIsi, "masuk -2");
@@ -316,11 +317,29 @@ class SiteController extends Controller {
             $model->file = UploadedFile::getInstance($model, 'file');
             array_push($listIsi, "masuk -1");
            if ($model->file && $model->validate()) {                
-                $model->file->saveAs('uploads/' . $model->file->baseName . '.' . $model->file->extension);
+               if($fp = fopen($model->file->tempName, 'r')){
+                   array_push($listIsi, "masuk -122");
+                    while (($line = fgetcsv($fp, 1000, ";")) !== false) {
+                        array_push($listIsi, "masuk .....");
+                        array_push($listIsi, $line[0], $line[1], $line[2], $line[3]);
+                    
+                        $new = new Complain;
+                        $new->jumlahKomplain = $line[0];
+                        $new->tanggal = $line[1];
+                        $new->responKomplain = $line[2];
+                        $new->jumlahCS = $line[3];
+                        if(!$new->save()){
+                            //array_push($listIsi, $new->getErrors());
+                               
+                        }
+                     }
+               }
+               $model->file->saveAs('uploads/' . $model->file->baseName . '.' . $model->file->extension);
             }
             array_push($listIsi, $model->file->tempName);
             $tpm = tempnam("C:\xampp\htdocs\yiibi\web\uploads\complain.csv", "complain");
             array_push($listIsi, $tpm);
+            
             if (($fp = fopen("C:\xampp\htdocs\yiibi\web\uploads\complain.csv", "r")) !== false) {
                 array_push($listIsi, "masuk 1");
 			     while (($line = fgetcsv($fp, 1000, ",")) !== false) {
@@ -339,8 +358,9 @@ class SiteController extends Controller {
         }
 
         return $this->render('upload', ['model' => $model, 'listisi' => $listIsi]);
-    }
-
+      }
 }
 
 
+
+    
