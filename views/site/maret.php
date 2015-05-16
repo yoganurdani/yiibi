@@ -15,12 +15,10 @@ $jumlahKomplain = array();
 $responKomplain = array();
 foreach($data as $oke => $value){
     $tgl = date("j",strtotime($value->tanggal));
-    $bln = date("M",strtotime($value->tanggal));
     $bulan = date("F",strtotime($value->tanggal));
     $tahun = date("Y",strtotime($value->tanggal));
-    $tb = $tgl . " " . $bln;
     //print_r($value->tanggal);
-    array_push($tanggal, $tb);
+    array_push($tanggal, $tgl);
     array_push($jumlahKomplain, $value->jumlahKomplain);
     array_push($responKomplain, $value->responKomplain);
     //array_push($keluhan, $value);
@@ -29,8 +27,10 @@ foreach($data as $oke => $value){
 //echo $form->field($model, 'Complain')->dropDownList($complainList, ['id'=>'Complain-id']);
 echo "Sorted By: <br> ";
 echo "<br>";
+
+
 echo ButtonDropdown::widget([
-    'label' => 'Month', 
+    'label' => 'Maret',
     'dropdown' => [
         'items' => [
             ['label' => 'All', 'url' => './index'],
@@ -54,12 +54,13 @@ echo ButtonDropdown::widget([
 echo "<br>";
 echo "<br>";
 
+
 echo Highcharts::widget([
    'options' => [
-      'title' => ['text' => 'Tabel Komplain Travelpedia Tahun '. $tahun ],
+      'title' => ['text' => 'Tabel Keluhan Travelpedia Bulan ' . $bulan . " Tahun " . $tahun],
       'xAxis' => [
          'categories' => $tanggal,
-          'title' => ['text' => 'Tanggal' ],
+          'title' => ['text' => $bulan ],
       ],
       'yAxis' => [
          'title' => ['text' => 'Jumlah Keluhan'],
@@ -72,23 +73,14 @@ echo Highcharts::widget([
    ]
 ]);
 
-echo "<br>Rata-rata jumlah Komplain per hari pada tahun " . $tahun . " adalah sebanyak:<b> ". $avg ."</b> komplain.";
-echo "<br> Rata-rata jumlah Komplain yang berhasil direspon Travelpedia per hari pada tahun " . $tahun . " adalah sebanyak:<b> ". $avgRespon ."</b> komplain.";
-echo "<br>Rata-rata jumlah Customer Service yang bertugas per hari pada tahun " . $tahun . " adalah sebanyak:<b> ". $avgCS ."</b> orang.";
-echo "<br> Rata-rata persentase jumlah Komplain yang berhasil direspon Travelpedia per hari pada tahun " . $tahun . " adalah sebanyak:<b> ". $avgPerRespon ."</b> %.";
-echo "<br> Rata-rata persentase jumlah Komplain yang tidak berhasil direspon Travelpedia per hari pada tahun " . $tahun . " adalah sebanyak:<b> ". $avgNoRespon ."</b> %.";
-echo "<br> Jumlah Komplain tertinggi pada tahun " . $tahun . " adalah <b> " . $maxKom .  "</b> Komplain."; 
-echo "<br> Jumlah Komplain terendah pada tahun " . $tahun . " adalah <b> " . $minKom .  "</b> Komplain."; 
-echo "<br> Agar dapat menangani semua respon yang masuk, Idealnya Customer Service yang harus bertugas per hari adalah <b>" . $maxCS .  "</b> orang."; 
+
+echo "Rata-rata jumlah Komplain per hari pada bulan " . $bulan . " " . $tahun . " adalah sebanyak:<b> ". $avgMaret ."</b> komplain.";
+
+echo "<br> Rata-rata jumlah Komplain yang berhasil direspon Travelpedia per hari pada bulan " . $bulan . " " . $tahun . " adalah sebanyak:<b> ". $avgResponMar ."</b> komplain.";
+echo "<br> Rata-rata persentase jumlah Komplain yang berhasil direspon Travelpedia per hari pada  bulan " . $bulan . " " . $tahun . " adalah sebanyak:<b> ". $avgPerResponMar ."</b> %.";
+echo "<br> Rata-rata persentase jumlah Komplain yang tidak berhasil direspon Travelpedia per hari pada  bulan " . $bulan . " " . $tahun . " adalah sebanyak:<b> ". $avgNoResponMar ."</b> %.";
+echo "<br> Jumlah Komplain tertinggi pada  bulan " . $bulan . " " . $tahun . " adalah <b> " . $maxKomMar .  "</b> Komplain."; 
+echo "<br> Jumlah Komplain terendah pada  bulan " . $bulan . " " . $tahun . " adalah <b> " . $minKomMar .  "</b> Komplain."; 
+echo "<br> Agar dapat menangani semua respon yang masuk, Idealnya Customer Service yang harus bertugas per hari pada bulan " . $bulan . " " . $tahun . "  adalah <b>" . $maxCSMar .  "</b> Orang."; 
 
 ?>
-
-
-   
-
-
-
-
-
- 
-  

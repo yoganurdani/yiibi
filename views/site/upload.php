@@ -7,5 +7,5 @@ use yii\widgets\ActiveForm;
 <?= $form->field($model, 'file')->fileInput() ?>
 
 <button>Submit</button>
-<?php echo var_dump($listisi); ?>
+
 <?php ActiveForm::end() ?>
