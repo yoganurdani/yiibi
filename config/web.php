@@ -58,6 +58,7 @@ $config = [
                 'logout' => 'site/logout',
                 'login' => 'site/login',
                 '' => 'site/index',
+                'komplain/index' => 'komplain/index'
             //'debug/<controller>/<action>' => 'debug/<controller>/<action>',
             ]
         ],

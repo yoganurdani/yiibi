@@ -6,6 +6,12 @@ use yii\widgets\ActiveForm;
 
 <?= $form->field($model, 'file')->fileInput() ?>
 
-<button>Submit</button>
+<select name="tipe_laporan" id="tipe_laporan">
+    <option value="komplain">Laporan Komplain</option>
+    <option value="bugs">Laporan Bugs</option>
+</select>
+<button type="submit">Submit</button>
 
 <?php ActiveForm::end() ?>
+<?php echo $tipee;
+?>

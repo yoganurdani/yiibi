@@ -112,18 +112,23 @@ AppAsset::register($this);
                             </ul>
                         </li>-->
                         <li>
-                            <a href="<?php echo Url::to(['product/index']); ?>">
-                                <i class="glyphicon glyphicon-equalizer"></i> <span>Product</span>
+                            <a href="<?php echo Url::to(['komplain/index']); ?>">
+                                <i class="glyphicon glyphicon-equalizer"></i> <span>Laporan Komplain</span>
                             </a>
                         </li>
                         <li>
-                            <a href="<?php echo Url::to(['client/index']); ?>">
-                                <i class="glyphicon glyphicon-star"></i> <span>Client</span>
+                            <a href="<?php echo Url::to(['bugs/index']); ?>">
+                                <i class="glyphicon glyphicon-equalizer"></i> <span>Laporan Bugs</span>
+                            </a>
+                        </li>
+                         <li>
+                            <a href="<?php echo Url::to(['site/upload']); ?>">
+                                <i class="glyphicon glyphicon-star"></i> <span>Upload Laporan</span>
                             </a>
                         </li>
                         
                         <?php if(Yii::$app->user->identity->role==\app\models\User::ROLE_ADMIN){ ?>
-                        <li>
+                       <!-- <li>
                             <a href="<?php echo Url::to(['user/index']); ?>">
                                 <i class="fa fa-user"></i> <span>Users</span>
                                 <small class="badge pull-right bg-yellow"><?php echo Yii::$app->util->countUser(); ?></small>
@@ -139,7 +144,7 @@ AppAsset::register($this);
                             <a href="<?php echo Url::to(['log-upload/index']); ?>">
                                 <i class="glyphicon glyphicon-folder-open"></i> <span>Logs</span>
                             </a>
-                        </li>
+                        </li> -->
 
                     </ul>
                 </section>
@@ -151,7 +156,7 @@ AppAsset::register($this);
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                        Dashboard
+                        Travelpedia
                         <small><?php echo $this->title; ?></small>
                     </h1>
                     <?=

@@ -1,3 +1,5 @@
+<h4> Laporan Komplain </h4>
+
 <?php
 use miloschuman\highcharts\Highcharts;
 use yii\widgets\ActiveField;
@@ -5,8 +7,9 @@ use yii\bootstrap\ButtonDropdown;
 use app\models\Complain;
 use yii\widgets\ActiveForm;
 
+//$keluhan = array();
 
-/* $tanggal = array();
+$tanggal = array();
 $bulan = "";
 $tahun = "";
 $jumlahKomplain = array();
@@ -78,7 +81,7 @@ echo "<br> Rata-rata persentase jumlah Komplain yang tidak berhasil direspon Tra
 echo "<br> Jumlah Komplain tertinggi pada tahun " . $tahun . " adalah <b> " . $maxKom .  "</b> Komplain."; 
 echo "<br> Jumlah Komplain terendah pada tahun " . $tahun . " adalah <b> " . $minKom .  "</b> Komplain."; 
 echo "<br> Agar dapat menangani semua respon yang masuk, Idealnya Customer Service yang harus bertugas per hari adalah <b>" . $maxCS .  "</b> orang."; 
-*/
+
 ?>
 
 

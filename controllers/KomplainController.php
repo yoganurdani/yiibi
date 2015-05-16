@@ -3,61 +3,39 @@
 namespace app\controllers;
 
 use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
-use app\models\ResetPasswordForm;
-use app\models\PasswordResetRequestForm;
-use app\models\SignupForm;
-use app\models\User;
 use app\models\Complain;
-use app\models\ImportCsv;
-use app\models\UploadForm;
-use yii\helpers\Url;
-use yii\web\UploadedFile;
+use yii\data\ActiveDataProvider;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
-//use app\widgets\Alert;
-
-
-class SiteController extends Controller {
-
-    public function behaviors() {
+/**
+ * KomplainController implements the CRUD actions for Complain model.
+ */
+class KomplainController extends Controller
+{
+    public function behaviors()
+    {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    'delete' => ['post'],
                 ],
             ],
         ];
     }
 
-    public function actions() {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
-        ];
-    }
-
-    public function actionIndex() {
+    /**
+     * Lists all Complain models.
+     * @return mixed
+     */
+    public function actionIndex()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => Complain::find(),
+        ]);
+        
         if (Yii::$app->user->isGuest) {
             $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('site/login'));
         }
@@ -93,296 +71,8 @@ class SiteController extends Controller {
        
         
         return $this->render('index', ['data'=> $data, 'model' => $model, 'avg' => $avg, 'avgRespon' => $avgRespon, 'avgPerRespon' => $avgPerRespon, 'avgNoRespon' => $avgNoRespon, 'maxKom' => $maxKom, 'minKom' => $minKom, 'maxCS' => $maxCS , 'avgCS' => $avgCS]);
-    }
-
-    public function actionLogin() {
-        $this->layout = 'login';
-
-        if (!\Yii::$app->user->isGuest) {
-            $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('site/upload'));
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->redirect('site/upload');
-        } else {
-            return $this->render('login', [
-                        'model' => $model,
-            ]);
-        }
-    }
-
-    public function actionLogout() {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
-    }
-
-    public function actionMe() {
-        Yii::$app->util->tab = 5;
-        $tab = (int) $_GET['tab'];
-        $active = [];
-        for ($i = 1; $i <= 3; $i++) {
-            if ($i == $tab)
-                $active[$i] = true;
-            else
-                $active[$i] = false;
-        }
-
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['site/login']);
-        }
-        $user = Yii::$app->user->identity;
-        Yii::$app->util->member = $user;
-
-        $model = $user;
-        $model->scenario = 'update';
-        if ($model->loadWithFiles(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', 'Well done! successfully to create data!  ');
-            //return $this->redirect(['index', 'username' => $user->username]);
-        } else {
-
-//            return $this->render('profile', [
-//                        'model' => $model,
-//                        'active' => $active
-//            ]);
-        }
-
-        return $this->render('profile', [
-                    'model' => $model,
-                    'active' => $active
-        ]);
-    }
-
-    public function actionForgot_password() {
-        $this->layout = 'login';
-        $model = new PasswordResetRequestForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendMail()) {
-                Yii::$app->getSession()->setFlash('success', 'Check your email for further instructions.');
-                return $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('site/login'));
-            } else {
-                Yii::$app->getSession()->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
-            }
-        }
-
-        return $this->render('requestPasswordResetToken', [
-                    'model' => $model,
-        ]);
-    }
-
-    public function actionResetPassword($token) {
-        $this->layout = 'login';
-        try {
-            $model = new ResetPasswordForm($token);
-        } catch (InvalidParamException $e) {
-            throw new BadRequestHttpException($e->getMessage());
-        }
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->getSession()->setFlash('success', 'New password was saved.');
-
-            return $this->goHome();
-        }
-
-        return $this->render('resetPassword', [
-                    'model' => $model,
-        ]);
-    }
-
-    public function actionChange_password() {
-        Yii::$app->util->tab = 5;
-        $user = Yii::$app->user->identity;
-        $token = Yii::$app->security->generateRandomString() . '_' . time();
-        //echo $token; exit(0);
-        $user->password_reset_token = $token;
-        $user->save();
-        Yii::$app->util->member = $user;
-        try {
-            $model = new ResetPasswordForm($token);
-        } catch (InvalidParamException $e) {
-            throw new BadRequestHttpException($e->getMessage());
-        }
-        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->getSession()->setFlash('success', 'New password was saved.');
-
-            return $this->goHome();
-        }
-
-        return $this->render('_change_password', ['model' => $model, 'user' => $user]);
-    }
-
-    public function actionContact() {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        } else {
-            return $this->render('contact', [
-                        'model' => $model,
-            ]);
-        }
-    }
-
-    public function actionAbout() {
-        return $this->render('about');
-    }
-
-    public function actionSignup() {
-        $this->layout = 'login';
-        $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
-                    Yii::$app->session->setFlash('success', 'Thank you for register. We will respond to you as soon as possible.');
-                    return $this->goHome();
-                }
-            }
-        }
-
-        return $this->render('signup', [
-                    'model' => $model,
-        ]);
-    }
-
-    public function actionThanks($id) {
-        $user = User::find()->where(['id' => $id])->one();
-        return $this->render('thanks', ['user' => $user]);
-    }
-
-    public function actionParsing() {
-        $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_sqlite3;  /* here i added */
-        $cacheEnabled = \PHPExcel_Settings::setCacheStorageMethod($cacheMethod);
-        if (!$cacheEnabled) {
-            echo "### WARNING - Sqlite3 not enabled ###" . PHP_EOL;
-        }
-        $objPHPExcel = new \PHPExcel();
-
-        $fileExcel = Yii::getAlias('@webroot/templates/operator.xls');
-        $inputFileType = \PHPExcel_IOFactory::identify($fileExcel);
-
-        $objReader = \PHPExcel_IOFactory::createReader($inputFileType);
-
-        $objReader->setReadDataOnly(true);
-
-        /**  Load $inputFileName to a PHPExcel Object  * */
-        $objPHPExcel = $objReader->load($fileExcel);
-
-        $total_sheets = $objPHPExcel->getSheetCount();
-
-        $allSheetName = $objPHPExcel->getSheetNames();
-        $objWorksheet = $objPHPExcel->setActiveSheetIndex(0);
-        $highestRow = $objWorksheet->getHighestRow();
-        $highestColumn = $objWorksheet->getHighestColumn();
-        $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
-        for ($row = 1; $row <= $highestRow; ++$row) {
-            for ($col = 0; $col < $highestColumnIndex; ++$col) {
-                $value = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
-
-                $arraydata[$row - 1][$col] = $value;
-            }
-        }
-
-
-
-        echo '<pre>';
-        print_r($arraydata);
-    }
-
-    public function actionTesting() {
-        $message = "#sintret ada aja kali";
-        $pos = strpos($message, "#");
-        if ($pos !== FALSE) {
-            echo 'ada #';
-            $usernameSendgrid = \Yii::$app->params['sendgrid_username'];
-            $passwordSendgrid = \Yii::$app->params['sendgrid_password'];
-            $users = \app\models\User::find()->where(['status' => \app\models\User::STATUS_ACTIVE])->all();
-            foreach ($users as $model) {
-                echo $model->username;
-                $aprot = '#' . strtolower($model->username);
-                if (strpos($message, $aprot) !== false) {
-                    echo 'ada' . $aprot;
-                    $sendgrid = new \SendGrid($usernameSendgrid, $passwordSendgrid, array("turn_off_ssl_verification" => true));
-                    $email = new \SendGrid\Email();
-                    $email->addTo($model->email)->
-                            setFrom(\Yii::$app->params['supportEmail'])->
-                            setSubject('Chat from ' . \Yii::$app->name)->
-                            setHtml($message);
-                    $sendgrid->send($email);
-                } else {
-                    
-                }
-            }
-        }
-    }
     
-    public function actionImportcsv() {
-	$model = new ImportCsv;
-	if (isset($_POST['ImportCsv'])) {
-		$model->attributes = $_POST['ImportCsv'];
-		$file = CUploadedFile::getInstance($model, 'file');
-		if (($fp = fopen($file->tempName, "r")) !== false) {
-			while (($line = fgetcsv($fp, 1000, ",")) !== false) {
-				$new_user = new User;
-				$new_user->nama = $line[0];
-				$new_user->username = $line[1];
-				$new_user->password = md5($line[2]);
-				$new_user->save();
-			}
-			fclose($fp);
-			$this->redirect(array('admin'));
-		}
-	}
-	$this->render('importcsv', array('model'=>$model));
-}
-    
-      public function actionUpload()
-    {
-	   
-        $model = new UploadForm();
-        if (Yii::$app->request->isPost) {
-            $model->file = UploadedFile::getInstance($model, 'file');
-            $tipe = Yii::$app->request->post('tipe_laporan');
-            if ($tipe == "komplain") {
-                Complain::deleteAll();
-                if ($model->file && $model->validate()) {                
-                   if($fp = fopen($model->file->tempName, 'r')){
-                        while (($line = fgetcsv($fp, 1000, ",")) !== false) {
-                            $new = new Complain;
-                            $new->jumlahKomplain = $line[0];
-                            $new->tanggal = $line[1];
-                            $new->responKomplain = $line[2];
-                            $new->jumlahCS = $line[3];
-                            $new->save();
-                         }
-                   }
-                   $model->file->saveAs('uploads/' . $model->file->baseName . '.' . $model->file->extension);
-                   fclose($fp);
-                   $this->redirect('index');
-                }
-            } else {
-                Bugs::deleteAll();
-                if ($model->file && $model->validate()) {                
-                   if($fp = fopen($model->file->tempName, 'r')){
-                        while (($line = fgetcsv($fp, 1000, ",")) !== false) {
-                            $new = new Bugs;
-                            $new->jumlahBugs = $line[0];
-                            $new->tanggal = $line[1];
-                            $new->tipeBugs = $line[2];
-                            $new->save();
-                         }
-                   }
-                   $model->file->saveAs('uploads/' . $model->file->baseName . '.' . $model->file->extension);
-                   fclose($fp);
-                   $this->redirect('index');
-                }
-            }
-         
-        }
-
-        return $this->render('upload', ['model' => $model, 'tipee' => $tipe]);
-      }
+    }
     
     public function actionJanuari()
     {
@@ -413,8 +103,7 @@ class SiteController extends Controller {
        return $this->render('januari', ['data' => $data, 'avgJanuari' => $avgJanuari,'avgResponJan' => $avgResponJan, 'avgPerResponJan' => $avgPerResponJan, 'avgNoResponJan' => $avgNoResponJan, 'maxKomJan' => $maxKomJan, 'minKomJan' => $minKomJan, 'maxCSJan' =>  $maxCSJan  ]);
     }
     
-    
-       public function actionFebruari()
+     public function actionFebruari()
     {
         $sql = 'SELECT * FROM complain WHERE SUBSTRING(tanggal,6,2) = 02';
         $data = Complain::findBySql($sql)->all(); 
@@ -735,8 +424,82 @@ class SiteController extends Controller {
         
        return $this->render('desember', ['data' => $data, 'avgDes' => $avgDes,'avgResponDes' => $avgResponDes, 'avgPerResponDes' => $avgPerResponDes, 'avgNoResponDes' => $avgNoResponDes, 'maxKomDes' => $maxKomDes, 'minKomDes' => $minKomDes, 'maxCSDes' =>  $maxCSDes ]);
     }
+
+    /**
+     * Displays a single Complain model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionView($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Creates a new Complain model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreate()
+    {
+        $model = new Complain();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    /**
+     * Updates an existing Complain model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    /**
+     * Deletes an existing Complain model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionDelete($id)
+    {
+        $this->findModel($id)->delete();
+
+        return $this->redirect(['index']);
+    }
+
+    /**
+     * Finds the Complain model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Complain the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Complain::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
 }
-
-
-
-    

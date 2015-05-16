@@ -339,49 +339,29 @@ class SiteController extends Controller {
     
       public function actionUpload()
     {
-	   
+	   Complain::deleteAll();
         $model = new UploadForm();
         if (Yii::$app->request->isPost) {
             $model->file = UploadedFile::getInstance($model, 'file');
-            $tipe = Yii::$app->request->post('tipe_laporan');
-            if ($tipe == "komplain") {
-                Complain::deleteAll();
-                if ($model->file && $model->validate()) {                
-                   if($fp = fopen($model->file->tempName, 'r')){
-                        while (($line = fgetcsv($fp, 1000, ",")) !== false) {
-                            $new = new Complain;
-                            $new->jumlahKomplain = $line[0];
-                            $new->tanggal = $line[1];
-                            $new->responKomplain = $line[2];
-                            $new->jumlahCS = $line[3];
-                            $new->save();
-                         }
-                   }
-                   $model->file->saveAs('uploads/' . $model->file->baseName . '.' . $model->file->extension);
-                   fclose($fp);
-                   $this->redirect('index');
-                }
-            } else {
-                Bugs::deleteAll();
-                if ($model->file && $model->validate()) {                
-                   if($fp = fopen($model->file->tempName, 'r')){
-                        while (($line = fgetcsv($fp, 1000, ",")) !== false) {
-                            $new = new Bugs;
-                            $new->jumlahBugs = $line[0];
-                            $new->tanggal = $line[1];
-                            $new->tipeBugs = $line[2];
-                            $new->save();
-                         }
-                   }
-                   $model->file->saveAs('uploads/' . $model->file->baseName . '.' . $model->file->extension);
-                   fclose($fp);
-                   $this->redirect('index');
-                }
+           if ($model->file && $model->validate()) {                
+               if($fp = fopen($model->file->tempName, 'r')){
+                    while (($line = fgetcsv($fp, 1000, ",")) !== false) {
+                        $new = new Complain;
+                        $new->jumlahKomplain = $line[0];
+                        $new->tanggal = $line[1];
+                        $new->responKomplain = $line[2];
+                        $new->jumlahCS = $line[3];
+                        $new->save();
+                     }
+               }
+               $model->file->saveAs('uploads/' . $model->file->baseName . '.' . $model->file->extension);
+               fclose($fp);
+               $this->redirect('index');
             }
          
         }
 
-        return $this->render('upload', ['model' => $model, 'tipee' => $tipe]);
+        return $this->render('upload', ['model' => $model]);
       }
     
     public function actionJanuari()
