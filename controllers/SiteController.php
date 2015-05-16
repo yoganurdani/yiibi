@@ -13,6 +13,7 @@ use app\models\PasswordResetRequestForm;
 use app\models\SignupForm;
 use app\models\User;
 use app\models\Complain;
+use app\models\Bugs;
 use app\models\ImportCsv;
 use app\models\UploadForm;
 use yii\helpers\Url;

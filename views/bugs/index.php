@@ -10,27 +10,11 @@ use yii\widgets\ActiveForm;
 
 //$keluhan = array();
 
-$tanggal = array();
-$bulan = "";
-$tahun = "";
-$jumlahKomplain = array();
-$responKomplain = array();
-foreach($data as $oke => $value){
-    $tgl = date("j",strtotime($value->tanggal));
-    $bln = date("M",strtotime($value->tanggal));
-    $bulan = date("F",strtotime($value->tanggal));
-    $tahun = date("Y",strtotime($value->tanggal));
-    $tb = $tgl . " " . $bln;
-    //print_r($value->tanggal);
-    array_push($tanggal, $tb);
-    array_push($jumlahKomplain, $value->jumlahKomplain);
-    array_push($responKomplain, $value->responKomplain);
-    //array_push($keluhan, $value);
-}
 
 //echo $form->field($model, 'Complain')->dropDownList($complainList, ['id'=>'Complain-id']);
 echo "Sorted By: <br> ";
 echo "<br>";
+/*
 echo ButtonDropdown::widget([
     'label' => 'Month', 
     'dropdown' => [
@@ -51,26 +35,58 @@ echo ButtonDropdown::widget([
         ],
     ],
 ]);
+*/
+?>
 
+<?php $form = ActiveForm::begin() ?>
 
+<select name="id">
+    <option value="All" <?php if ($selector == "All"){echo selected;} ?>>Semua</option>
+    <option value="January" <?php if ($selector == "January"){echo selected;} ?>>Januari</option>
+    <option value="February" <?php if ($selector == "February"){echo selected;} ?>>Februari</option>
+    <option value="March" <?php if ($selector == "March"){echo selected;} ?>>Maret</option>
+    <option value="April" <?php if ($selector == "April"){echo selected;} ?>>April</option>
+    <option value="May" <?php if ($selector == "May"){echo selected;} ?>>Mei</option>
+    <option value="June" <?php if ($selector == "June"){echo selected;} ?>>Juni</option>
+    <option value="July" <?php if ($selector == "July"){echo selected;} ?>>Juli</option>
+    <option value="August" <?php if ($selector == "August"){echo selected;} ?>>Agustus</option>
+    <option value="September" <?php if ($selector == "September"){echo selected;} ?>>September</option>
+    <option value="October" <?php if ($selector == "October"){echo selected;} ?>>Oktober</option>
+    <option value="November" <?php if ($selector == "November"){echo selected;} ?>>November</option>
+    <option value="December" <?php if ($selector == "December"){echo selected;} ?>>Desember</option>
+</select>
+
+<button type="submit">Pilih</button>
+
+<?php ActiveForm::end() ?>
+
+<?php
 echo "<br>";
 echo "<br>";
 
 echo Highcharts::widget([
    'options' => [
-      'title' => ['text' => 'Tabel Komplain Travelpedia Tahun '. $tahun ],
+       'chart' => ['type' => 'column'],
+      'title' => ['text' => 'Tabel Laporan Bug Travelpedia Bulan '. $selector ],
       'xAxis' => [
-         'categories' => $tanggal,
-          'title' => ['text' => 'Tanggal' ],
-      ],
-      'yAxis' => [
-         'title' => ['text' => 'Jumlah Keluhan'],
-          'min' => 0
-      ],
+            'categories' => [
+                'Fitur Pencarian Tiket Promo',
+                'Fitur Pemesanan Tiket',
+                'Fitur Pencarian Tiket',
+                'Fitur Tutorial',
+                'Fitur Login',
+                'Fitur Registrasi',
+                'Lain-lain',
+            ]
+        ],
+        'yAxis' => [
+            'title' => [
+                'text' => 'Jumlah Laporan Bugs'
+            ]
+        ],
       'series' => [
-         ['name' => 'Jumlah Komplain', 'data' => $jumlahKomplain, 'color' => red],
-         ['name' => 'Respon Komplain', 'data' => $responKomplain, 'color' => blue]
-      ]
+            ['type' => 'column', 'name' => 'Bugs', 'data' => $tipe[1]]
+        ]
    ]
 ]);
 

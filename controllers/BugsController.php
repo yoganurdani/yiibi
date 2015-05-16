@@ -38,21 +38,80 @@ class BugsController extends Controller
 
         $model = array();
         $data = Bugs::find()->all();
-        $month = array();
-        foreach ($data as $key => $value){
-            $tanggal = string(date("F",$value->tanggal))
-            if ( count($month) == 0){
-                array_push($month, array("January", array($value->tipeBugs, $value->jumlahBugs)))
-            } else {
-                foreach ($month as $key2 => $value2) {
-                    if ($data->)
+        $tipe = array(array('Fitur Pencarian Tiket Promo',
+                'Fitur Pemesanan Tiket',
+                'Fitur Pencarian Tiket',
+                'Fitur Tutorial',
+                'Fitur Login',
+                'Fitur Registrasi',
+                'Lain-lain'), array(0,0,0,0,0,0,0));
+        $selector = "All";
+        if (Yii::$app->request->isPost) {
+            $selector = Yii::$app->request->post('id');
+        }
+        
+        if ($selector == "All")
+        {
+            foreach ($data as $key => $value){
+                    
+                    if(count($tipe) == 0)
+                    {
+                        array_push($tipe[0], $value->tipeBugs);
+                        array_push($tipe[1], $value->jumlahBugs);
+                    }
+                   
+                    for ($i = 0; $i<count($tipe[0]); $i++)
+                    {
+                        if ($value->tipeBugs == $tipe[0][$i])
+                        {
+                            $tipe[1][$i] += $value->jumlahBugs;
+                        //    break;
+                        }
+
+                        //if ($i == count($tipe)-1)
+                        //{
+                        //    array_push($tipe[0], $value->tipeBugs);
+                        //    array_push($tipe[1], $value->jumlahBugs);
+                        //}
+                    }
+            }
+        }
+        else {
+            foreach ($data as $key => $value){
+                $tanggal = date("F",strtotime($value->tanggal));
+                $tanggal = (string) $tanggal;
+                if ( $selector == $tanggal )
+                {
+                    if(count($tipe) == 0)
+                    {
+                        array_push($tipe[0], $value->tipeBugs);
+                        array_push($tipe[1], $value->jumlahBugs);
+                    }
+                    else
+                    {
+                        for ($i = 0; $i<count($tipe[0]); $i++)
+                        {
+                            if ($value->tipeBugs == $tipe[0][$i])
+                            {
+                                $tipe[1][$i] += $value->jumlahBugs;
+                            //    break;
+                            }
+
+                            //if ($i == count($tipe)-1)
+                            //{
+                            //    array_push($tipe[0], $value->tipeBugs);
+                            //    array_push($tipe[1], $value->jumlahBugs);
+                            //}
+
+                        }
+                    }
                 }
             }
         }
         
-        
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'tipe' => $tipe,
+            'selector' => $selector
         ]);
     }
 
