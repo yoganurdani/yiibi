@@ -82,6 +82,24 @@ echo "<br> Agar dapat menangani semua respon yang masuk, Idealnya Customer Servi
 ?>
 
 
+
+<div class="panel panel-primary">
+  <div class="panel-heading"><div class="glyphicon glyphicon-home"> Home</div></div>
+  <div class="panel-body" style="margin-left:15px;">
+      <li>Sistem ini merupakan ..</li>
+      <li>Bertujuan untuk ..</li>
+  </div>
+</div>
+
+<div class="panel panel-warning">
+  <div class="panel-heading"><div class="glyphicon glyphicon-th-list"> Cara kerja</div></div>
+  <div class="panel-body" style="margin-left:15px;">
+      <li>Cara kerja ..</li>
+      <li>1 ..</li> 
+      <li>2 ..</li> 
+      <li>3 ..</li> 
+  </div>
+</div>
    
 
 

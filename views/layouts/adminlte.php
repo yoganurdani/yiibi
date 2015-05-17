@@ -20,7 +20,8 @@ AppAsset::register($this);
         <meta charset="<?= Yii::$app->charset ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <?= Html::csrfMetaTags() ?>
-        <title><?= Html::encode($this->title) ?> - <?php echo Yii::$app->name;?></title>
+        <!--<title><= Html::encode($this->title) ?> - <php echo Yii::$app->name;?></title>-->
+        <title>Travelpedia - Dashboard</title>
         <?php $this->head() ?>
     </head>
     <?php $this->beginBody() ?>
@@ -75,6 +76,7 @@ AppAsset::register($this);
                 </div>
             </nav>
         </header>
+        
         <div class="wrapper row-offcanvas row-offcanvas-left">
             <!-- Left side column. contains the logo and sidebar -->
             <aside class="left-side sidebar-offcanvas">
@@ -96,7 +98,7 @@ AppAsset::register($this);
                     <ul class="sidebar-menu">
                         <li class="<?php if($urla == 'site/index'){echo 'active';} ?>">
                             <a href="<?php echo Url::to(['site/index']); ?>">
-                                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                                <i class="fa fa-dashboard"></i> <span>Home</span>
                             </a>
                         </li>
 <!--                        <li class="treeview">
@@ -125,7 +127,7 @@ AppAsset::register($this);
                         </li>
                          <li class="<?php if($urla == 'site/upload'){echo 'active';} ?>">
                             <a href="<?php echo Url::to(['site/upload']); ?>">
-                                <i class="glyphicon glyphicon-star"></i> <span>Upload Laporan</span>
+                                <i class="glyphicon glyphicon-upload"></i> <span>Upload Laporan</span>
                             </a>
                         </li>
                         
@@ -188,7 +190,6 @@ AppAsset::register($this);
             </aside><!-- /.right-side -->
         </div><!-- ./wrapper -->
         <!-- add new calendar event modal -->
-
 
         <?php $this->endBody() ?>
     </body>

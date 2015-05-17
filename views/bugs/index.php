@@ -11,11 +11,9 @@ use yii\widgets\ActiveForm;
 //$keluhan = array();
 // assume $_GET = ['id' => 123, 'src' => 'google'], current route is "post/view"
 
-echo Yii::$app->controller->getRoute();
 
 //echo $form->field($model, 'Complain')->dropDownList($complainList, ['id'=>'Complain-id']);
 echo "Sorted By: <br> ";
-echo "<br>";
 /*
 echo ButtonDropdown::widget([
     'label' => 'Month', 
@@ -41,8 +39,7 @@ echo ButtonDropdown::widget([
 ?>
 
 <?php $form = ActiveForm::begin() ?>
-
-<select name="id">
+<select class="form-control" style="width:150px; float:left;" name="id">
     <option value="All" <?php if ($selector == "All"){echo selected;} ?>>Semua</option>
     <option value="January" <?php if ($selector == "January"){echo selected;} ?>>Januari</option>
     <option value="February" <?php if ($selector == "February"){echo selected;} ?>>Februari</option>
@@ -58,7 +55,7 @@ echo ButtonDropdown::widget([
     <option value="December" <?php if ($selector == "December"){echo selected;} ?>>Desember</option>
 </select>
 
-<button type="submit">Pilih</button>
+<button class="btn btn-success" style="margin-left: 10px;" type="submit">Pilih</button>
 
 <?php ActiveForm::end() ?>
 
@@ -129,29 +126,35 @@ foreach($tipe[1] as $key => $value)
     
 }
 
-echo "<br> Jumlah laporan bugs <b>Fitur Pencarian Tiket Promo</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][0]."</b> bugs";
-echo "<br> Jumlah laporan bugs <b>Fitur Pemesanan Tiket</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][1]."</b> bugs";
-echo "<br> Jumlah laporan bugs <b>Fitur Pencarian Tiket</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][2]."</b> bugs";
-echo "<br> Jumlah laporan bugs <b>Fitur Tutorial</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][3]."</b> bugs";
-echo "<br> Jumlah laporan bugs <b>Fitur Login</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][4]."</b> bugs";
-echo "<br> Jumlah laporan bugs <b>Fitur Registrasi</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][5]."</b> bugs";
-echo "<br> Jumlah laporan bugs <b>Fitur Lain-lain</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][6]."</b> bugs";
-
-echo "<hr> Analisa : ";
-echo "<br> Jumlah laporan bugs semua fitur pada bulan ".$selector. " adalah sebanyak: <b>".$semuaBugs. "</b> bugs";
-echo "<br> Fitur dengan laporan bugs terkecil adalah (".$minBugsTipe.") dengan <b>".$minBugs."</b> bugs";
-echo "<br> Fitur dengan laporan bugs terbesar adalah (".$maxBugsTipe.") dengan <b>".$maxBugs."</b> bugs";
-echo "<br> Saran : ";
-echo "<br> Fitur yang harus segera ditangani bugs-nya adalah : <b>".$maxBugsTipe."</b> (<i>berdasarkan banyaknya jumlah bugs</i>).";
-
 
 ?>
 
+<div class="panel panel-info">
+  <div class="panel-heading"><div class="glyphicon glyphicon-eye-open"> Ringkasan</div></div>
+  <div class="panel-body" style="margin-left:15px;">
+      <?php 
+        echo "<li> Jumlah laporan bugs <b>Fitur Pencarian Tiket Promo</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][0]."</b> bugs</li>";
+        echo "<li> Jumlah laporan bugs <b>Fitur Pemesanan Tiket</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][1]."</b> bugs</li>";
+        echo "<li> Jumlah laporan bugs <b>Fitur Pencarian Tiket</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][2]."</b> bugs</li>";
+        echo "<li> Jumlah laporan bugs <b>Fitur Tutorial</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][3]."</b> bugs</li>";
+        echo "<li> Jumlah laporan bugs <b>Fitur Login</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][4]."</b> bugs</li>";
+        echo "<li> Jumlah laporan bugs <b>Fitur Registrasi</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][5]."</b> bugs</li>";
+        echo "<li> Jumlah laporan bugs <b>Fitur Lain-lain</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][6]."</b> bugs</li>";
+        ?>
+  </div>
+</div>
 
-   
-
-
-
+<div class="panel panel-success">
+  <div class="panel-heading"><div class="glyphicon glyphicon-heart-empty"> Analisa dan Saran</div></div>
+  <div class="panel-body" style="margin-left:15px;">
+      <?php 
+        echo "<li> Jumlah laporan bugs semua fitur pada bulan ".$selector. " adalah sebanyak: <b>".$semuaBugs. "</b> bugs</li>";
+        echo "<li> Fitur dengan laporan bugs terkecil adalah (".$minBugsTipe.") dengan <b>".$minBugs."</b> bugs</li>";
+        echo "<li> Fitur dengan laporan bugs terbesar adalah (".$maxBugsTipe.") dengan <b>".$maxBugs."</b> bugs</li>";
+        echo "<li> Fitur yang harus segera ditangani bugs-nya adalah : <b>".$maxBugsTipe."</b> (<i>berdasarkan banyaknya jumlah bugs</i>)</li>";
+        ?>
+  </div>
+</div>
 
 
  
