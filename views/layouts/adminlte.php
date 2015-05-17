@@ -29,7 +29,8 @@ AppAsset::register($this);
         <header class="header">
             <a href="<?php echo Url::to(['site/index']); ?>" class="logo">
                 <!-- Add the class icon to your logo image or logo icon to add the margining -->
-                <?php echo Yii::$app->name;?>
+                <!--<php echo Yii::$app->name;?>-->
+                <?php echo "Treavelpedia"; ?>
             </a>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top" role="navigation">
@@ -91,8 +92,9 @@ AppAsset::register($this);
                         </div>
                     </div>
                     <!-- sidebar menu: : style can be found in sidebar.less -->
+                    <?php $urla = Yii::$app->controller->getRoute(); ?>
                     <ul class="sidebar-menu">
-                        <li class="active">
+                        <li class="<?php if($urla == 'site/index'){echo 'active';} ?>">
                             <a href="<?php echo Url::to(['site/index']); ?>">
                                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                             </a>
@@ -111,17 +113,17 @@ AppAsset::register($this);
 
                             </ul>
                         </li>-->
-                        <li>
+                        <li class="<?php if($urla == 'komplain/index'){echo 'active';} ?>">
                             <a href="<?php echo Url::to(['komplain/index']); ?>">
                                 <i class="glyphicon glyphicon-equalizer"></i> <span>Laporan Komplain</span>
                             </a>
                         </li>
-                        <li>
+                        <li class="<?php if($urla == 'bugs/index'){echo 'active';} ?>">
                             <a href="<?php echo Url::to(['bugs/index']); ?>">
                                 <i class="glyphicon glyphicon-equalizer"></i> <span>Laporan Bugs</span>
                             </a>
                         </li>
-                         <li>
+                         <li class="<?php if($urla == 'site/upload'){echo 'active';} ?>">
                             <a href="<?php echo Url::to(['site/upload']); ?>">
                                 <i class="glyphicon glyphicon-star"></i> <span>Upload Laporan</span>
                             </a>

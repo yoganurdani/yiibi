@@ -9,7 +9,9 @@ use yii\widgets\ActiveForm;
 
 
 //$keluhan = array();
+// assume $_GET = ['id' => 123, 'src' => 'google'], current route is "post/view"
 
+echo Yii::$app->controller->getRoute();
 
 //echo $form->field($model, 'Complain')->dropDownList($complainList, ['id'=>'Complain-id']);
 echo "Sorted By: <br> ";
@@ -90,14 +92,58 @@ echo Highcharts::widget([
    ]
 ]);
 
-echo "<br>Rata-rata jumlah Komplain per hari pada tahun " . $tahun . " adalah sebanyak:<b> ". $avg ."</b> komplain.";
-echo "<br> Rata-rata jumlah Komplain yang berhasil direspon Travelpedia per hari pada tahun " . $tahun . " adalah sebanyak:<b> ". $avgRespon ."</b> komplain.";
-echo "<br>Rata-rata jumlah Customer Service yang bertugas per hari pada tahun " . $tahun . " adalah sebanyak:<b> ". $avgCS ."</b> orang.";
-echo "<br> Rata-rata persentase jumlah Komplain yang berhasil direspon Travelpedia per hari pada tahun " . $tahun . " adalah sebanyak:<b> ". $avgPerRespon ."</b> %.";
-echo "<br> Rata-rata persentase jumlah Komplain yang tidak berhasil direspon Travelpedia per hari pada tahun " . $tahun . " adalah sebanyak:<b> ". $avgNoRespon ."</b> %.";
-echo "<br> Jumlah Komplain tertinggi pada tahun " . $tahun . " adalah <b> " . $maxKom .  "</b> Komplain."; 
-echo "<br> Jumlah Komplain terendah pada tahun " . $tahun . " adalah <b> " . $minKom .  "</b> Komplain."; 
-echo "<br> Agar dapat menangani semua respon yang masuk, Idealnya Customer Service yang harus bertugas per hari adalah <b>" . $maxCS .  "</b> orang."; 
+
+foreach($tipe[1] as $key => $value)
+{
+    $semuaBugs += $value;
+}
+$maxBugs = 0;
+$maxBugsTipe = "<i>not found</i>";
+$minBugs = 1000000;
+$minBugsTipe = "<i>not found</i>";
+$i = 0;
+foreach($tipe[1] as $key => $value)
+{
+    if($minBugs == $value)
+    {
+        $minBugs = $value;
+        $minBugsTipe = $minBugsTipe.", ".$tipe[0][$i];
+    }
+    else if($minBugs > $value)
+    {
+        $minBugs = $value;
+        $minBugsTipe = $tipe[0][$i];
+    }
+    
+    if($maxBugs == $value)
+    {
+        $maxBugs = $value;
+        $maxBugsTipe = $maxBugsTipe.", ".$tipe[0][$i];
+    }
+    else if($maxBugs < $value)
+    {
+        $maxBugs = $value;
+        $maxBugsTipe = $tipe[0][$i];
+    }
+    $i = $i+1;
+    
+}
+
+echo "<br> Jumlah laporan bugs <b>Fitur Pencarian Tiket Promo</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][0]."</b> bugs";
+echo "<br> Jumlah laporan bugs <b>Fitur Pemesanan Tiket</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][1]."</b> bugs";
+echo "<br> Jumlah laporan bugs <b>Fitur Pencarian Tiket</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][2]."</b> bugs";
+echo "<br> Jumlah laporan bugs <b>Fitur Tutorial</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][3]."</b> bugs";
+echo "<br> Jumlah laporan bugs <b>Fitur Login</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][4]."</b> bugs";
+echo "<br> Jumlah laporan bugs <b>Fitur Registrasi</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][5]."</b> bugs";
+echo "<br> Jumlah laporan bugs <b>Fitur Lain-lain</b> pada bulan ".$selector. " adalah sebanyak: <b>".$tipe[1][6]."</b> bugs";
+
+echo "<hr> Analisa : ";
+echo "<br> Jumlah laporan bugs semua fitur pada bulan ".$selector. " adalah sebanyak: <b>".$semuaBugs. "</b> bugs";
+echo "<br> Fitur dengan laporan bugs terkecil adalah (".$minBugsTipe.") dengan <b>".$minBugs."</b> bugs";
+echo "<br> Fitur dengan laporan bugs terbesar adalah (".$maxBugsTipe.") dengan <b>".$maxBugs."</b> bugs";
+echo "<br> Saran : ";
+echo "<br> Fitur yang harus segera ditangani bugs-nya adalah : <b>".$maxBugsTipe."</b> (<i>berdasarkan banyaknya jumlah bugs</i>).";
+
 
 ?>
 
