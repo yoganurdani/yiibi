@@ -86,8 +86,8 @@ echo "<br> Agar dapat menangani semua respon yang masuk, Idealnya Customer Servi
 <div class="panel panel-primary">
   <div class="panel-heading"><div class="glyphicon glyphicon-home"> Home</div></div>
   <div class="panel-body" style="margin-left:15px;">
-      <li>Sistem ini merupakan ..</li>
-      <li>Bertujuan untuk ..</li>
+      <li>Sistem ini merupakan dashboard yang akan menampilkan permasalahan pada perusahaan Travelpedia</li>
+      <li>Bertujuan untuk membantu perusahaan dalam menganalisis keluhan pelanggan yang masuk ke perusahaan serta menganalisis bugs error yang terjadi pada sistem E-commerce Travelpedia</li>
   </div>
 </div>
 
@@ -95,9 +95,9 @@ echo "<br> Agar dapat menangani semua respon yang masuk, Idealnya Customer Servi
   <div class="panel-heading"><div class="glyphicon glyphicon-th-list"> Cara kerja</div></div>
   <div class="panel-body" style="margin-left:15px;">
       <li>Cara kerja ..</li>
-      <li>1 ..</li> 
-      <li>2 ..</li> 
-      <li>3 ..</li> 
+      <li>1 Masukan file laporan keluhan pelanggan atau laporan bugs dalam bentuk csv</li> 
+      <li>2 Upload file laporan ke dalam sistem</li> 
+      <li>3 Lihat tampilan dashboard sesuai file laporan yang telah di submit</li> 
   </div>
 </div>
    
